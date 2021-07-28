@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>機器人名單系統</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css?v1.0.7">
+</head>
+
+<body>
+    <div id="main" v-cloak>
+        <section>
+            <div class="container" id="content">
+                <div class="block-heading">
+                    <h2>{{groupName}} 簽到名單</h2>
+                    <p>此簽到名單僅供檢視，且請勿將此名單外流</p>
+                </div>
+                <div class="row form-style">
+                    <div class="simpleInfo">
+                        <h3 class="title">共 <span class="bolder-pink"> {{totalList}} </span>筆資料</h3>
+                        <div class="form-group">
+                            <input id="userInfo" type="text" class="form-control" placeholder="請輸入搜尋關鍵字" v-model="userInfo" aria-label="Card Holder"
+                                aria-describedby="basic-addon1">
+                        </div>
+
+                    </div>
+                    <div class="detailform">
+                        <div class="table-responsive col-sm-12">
+
+                            <table class="table table-striped" style="table-layout: fixed; overflow:break-word">
+                                <thead v-for="(item,index) in HeadData" :key="index">
+                                    <tr>
+                                        <th scope="col">{{item.userName}}</th>
+                                        <th scope="col">{{item.gameUser}}</th>
+                                        <th scope="col">{{item.gameWork}}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(item,index) in ListData" :key="index">
+                                        <td style="word-wrap: break-word; word-break: break-all ">{{item.userName}}</td>
+                                        <td>{{item.gameUser}}</td>
+                                        <td>{{item.gameWork}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="row form-style" v-if="!AllowLogIn">
+                    <div class="simpleInfo center">
+                        <p class="danger">群組參數錯誤</p>
+                    </div>
+                </div>
+                <div class="copyright">Copyright © 2020 Shela All Rights Reserved. v1.0.7</div>
+            </div>
+        </section>
+
+
+    </div>
+
+
+    <script src="js/vue.min.js"></script>
+    <!-- <script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.4.2/vue.js'></script> -->
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-app.js"></script>
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+ https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-analytics.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/7.16.1-2020615181619/firebase-firestore.min.js"></script>
+
+
+    <script>
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        var firebaseConfig = {
+            apiKey: "AIzaSyBIxBz_HgjGg07iQl7DczEZBfuwqImr06E",
+            authDomain: "linebot-roo.firebaseapp.com",
+            projectId: "linebot-roo",
+            storageBucket: "linebot-roo.appspot.com",
+            messagingSenderId: "128011934556",
+            appId: "1:128011934556:web:e039092143c07730683f99",
+            measurementId: "G-Q2VQKFCFM5"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        firebase.analytics();
+        var db = firebase.firestore();
+        var url = window.location.href;
+        var params = "";
+        if (url.indexOf('?') != -1) {
+            params = "?" + url.split('?')[1].toString();
+        }
+    </script>
+    <script src="js/b64.js"></script>
+    <script src="js/index.js?v1.0.7"></script>
+</body>
+
+</html>
