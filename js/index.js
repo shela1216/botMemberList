@@ -4,16 +4,18 @@
         searchTxt: "",
         viewHeight: document.body.clientHeight,
         AllowLogIn: false,
-        groupName:"",
-        totalList:0,
-        groupId:"",
-        userInfo:"",
+        fixedOrderPanel:false,
+        groupName: "",
+        groupData:"",
+        totalList: 0,
+        workNum:"",
+        groupId: "",
         params: params,
-        ref: db.collection('botMember'),
-        workref:"",
-        ListData:[],
-        HeadData:[],
-        allWork:[]
+        workref: "",
+        workList:[],
+        ListData: [],
+        HeadData: [],
+        allWork: []
     }
     var vm = new Vue({
         el: "#main",
@@ -22,8 +24,28 @@
             PageHeight: function () {
                 return this.viewHeight - 147 + "px"
             },
-            groupInfo:function(){
+            groupInfo: function () {
                 return db.collection('loginGroup').doc(this.groupId)
+            },
+            search_List: function() {
+                if(this.searchTxt!=""){
+                    var newList = [];
+                    for (var i = 0; i < this.ListData.length; i++) {
+    
+                        if (this.ListData[i].gameUser.indexOf(this.searchTxt) != -1) {
+                            newList.push(this.ListData[i])
+                        }else if (this.ListData[i].gameWork.indexOf(this.searchTxt) != -1) {
+                            newList.push(this.ListData[i])
+                        }else if (this.ListData[i].userName.indexOf(this.searchTxt) != -1) {
+                            newList.push(this.ListData[i])
+                        }
+                    }
+                    
+                    return newList
+                }else{
+                    return this.ListData;
+                }
+
             },
             args: function () {
                 var ret = {};
@@ -47,59 +69,95 @@
         mounted: function () {
             this.viewHeight = document.body.clientHeight;
             window.addEventListener('resize', this.heightChange);
+            document.addEventListener('scroll', this.handleScroll);
         },
         created: function () {
-            if(this.args.groupid){
+            if (this.args.groupid) {
                 this.groupId = this.args.groupid;
-            }else{
+            } else {
                 this.AllowLogIn = false;
                 return
             }
-            var groupInfo = this.groupInfo;
+            var self = this;
+            var groupInfo = db.collection('loginGroup').doc(self.groupId);
+            
             groupInfo.get().then(doc => {
-                this.groupName = doc.data()['groupName']
-            })
-            var list = this.ref;
-            if (list) {
-                this.AllowLogIn = true;
-                var data = list;
-                var self = this;
-                var ListData = this.ListData;
-                var headData = this.HeadData;
-                
-                data.get().then(querySnapshot => {
+                this.groupData = doc.data();
+                var data = this.groupData;
+                this.groupName =data.groupName;
+                this.workNum = data.work;
+                var botWork =  db.collection('gameWork').doc(this.workNum).collection('workList');
+                botWork.get().then(querySnapshot => {                    
                     querySnapshot.forEach(doc => {
-                        if (doc.id != 'title') {
-                            if (doc.data()['groupid'] == self.groupId) {
-                                ListData.push(doc.data());
-                            }
-        
-                        } else {
-                            headData.push(doc.data());
-                        }
+                        self.workList.push(doc.data()['name'])
                     });
-                    this.totalList = ListData.length;
-                    ListData.sort(function (a, b) {
-                        var value1 = a['gameWork'];
-                        var value2 = b['gameWork'];
-                        if (value1 == value2) {
-                            return a['userName'] > b['userName'] ? 1 : -1
-                        } else {
-                            return value1 > value2 ? 1 : -1
-                        }
-                    })
-                });
-            } else {
-            }            
 
+                });
+                var list =  db.collection('loginGroup').doc(this.groupId).collection('memberList');
+                if (list) {
+                    this.AllowLogIn = true;
+                    var data = list;
+                    var self = this;
+                    var ListData = this.ListData;
+                    var headData = this.HeadData;
+    
+                    data.get().then(querySnapshot => {
+                        querySnapshot.forEach(doc => {
+                            if (doc.id != 'title') {
+                                ListData.push(doc.data());
+    
+                            } else {
+                                headData.push(doc.data());
+                            }
+                        });
+                        this.totalList = ListData.length;
+                        ListData.sort(function (a, b) {
+                            var value1 = a['gameWork'];
+                            var value2 = b['gameWork'];
+                            if (value1 == value2) {
+                                return a['userName'] > b['userName'] ? 1 : -1
+                            } else {
+                                return value1 > value2 ? 1 : -1
+                            }
+                        })
+                    });
+                } else {
+                }
+            })
+
+
+        },
+
+        destroyed: function () {
+            document.removeEventListener('scroll', this.handleScroll);
         },
 
         methods: {
             heightChange: function (event) {
                 var screenHeight = document.body.clientHeight;
                 this.viewHeight = screenHeight;
-            }
+            },
+            handleScroll: function () {
+                const checkWindow = window !== undefined && window.scrollY;
 
+                if (checkWindow && window.scrollY > 144) {
+                    this.fixedOrderPanel = true
+                } else {
+                    this.fixedOrderPanel = false
+                }
+
+                const scrollFix = (scrolled) => {
+                    if (scrolled > 144) {
+
+                        this.fixedOrderPanel = true
+                    } else {
+                        this.fixedOrderPanel = false
+                    }
+                }
+            },
+            setUserInfo:function(item){
+                this.searchTxt = item;
+            }
         }
     })
 })(window);

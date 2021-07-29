@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>機器人名單系統</title>
+    <title>兔管家群組名單系統</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/style.css?v1.0.7">
 </head>
@@ -13,36 +13,39 @@
 <body>
     <div id="main" v-cloak>
         <section>
-            <div class="container" id="content">
+            <div class="container" id="content"  >
                 <div class="block-heading">
-                    <h2>{{groupName}} 簽到名單</h2>
-                    <p>此簽到名單僅供檢視，且請勿將此名單外流</p>
+                    <h2 class="col-2 text-truncate">{{groupName}} 簽到名單</h2>
+                    <p>此簽到名單僅供檢視，請勿將此名單外流</p>
                 </div>
-                <div class="row form-style">
-                    <div class="simpleInfo">
-                        <h3 class="title">共 <span class="bolder-pink"> {{totalList}} </span>筆資料</h3>
+                <div class="row form-style" v-if="AllowLogIn">
+                    <div class="simpleInfo" :class="{ fixed: fixedOrderPanel }">
+                        <h3 class="title">共
+                            <span class="bolder-pink"> {{totalList}} </span>筆簽到資料</h3>
                         <div class="form-group">
-                            <input id="userInfo" type="text" class="form-control" placeholder="請輸入搜尋關鍵字" v-model="userInfo" aria-label="Card Holder"
+                            <input id="userInfo" type="text" class="form-control" placeholder="請輸入搜尋關鍵字" v-model="searchTxt" aria-label="Card Holder"
                                 aria-describedby="basic-addon1">
                         </div>
+                        <p>快速搜尋:</p>
+                        <div class="searchTag" ><button type="button" class="btn btn-info"  @click="searchTxt=''" >ALL</button> <button type="button" class="btn btn-info" v-for="(item,index) in workList" :key="index" @click="setUserInfo(item)" >{{item}}</button></div>
 
                     </div>
                     <div class="detailform">
-                        <div class="table-responsive col-sm-12">
+                        <div class="table-responsive customTable">
 
                             <table class="table table-striped" style="table-layout: fixed; overflow:break-word">
                                 <thead v-for="(item,index) in HeadData" :key="index">
                                     <tr>
-                                        <th scope="col">{{item.userName}}</th>
-                                        <th scope="col">{{item.gameUser}}</th>
-                                        <th scope="col">{{item.gameWork}}</th>
+                                        <th >{{item.userName}}</th>
+                                        <th >{{item.gameUser}}</th>
+                                        <th >{{item.gameWork}}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="(item,index) in ListData" :key="index">
+                                    <tr v-for="(item,index) in search_List" :key="index">
                                         <td style="word-wrap: break-word; word-break: break-all ">{{item.userName}}</td>
-                                        <td>{{item.gameUser}}</td>
-                                        <td>{{item.gameWork}}</td>
+                                        <td style="word-wrap: break-word; word-break: break-all ">{{item.gameUser}}</td>
+                                        <td style="word-wrap: break-word; word-break: break-all ">{{item.gameWork}}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -56,7 +59,7 @@
                         <p class="danger">群組參數錯誤</p>
                     </div>
                 </div>
-                <div class="copyright">Copyright © 2020 Shela All Rights Reserved. v1.0.7</div>
+                <div class="copyright">Copyright © 2021 兔管家工作室 All Rights Reserved. v1.0.0</div>
             </div>
         </section>
 
@@ -64,8 +67,8 @@
     </div>
 
 
-    <script src="js/vue.min.js"></script>
-    <!-- <script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.4.2/vue.js'></script> -->
+    <!-- <script src="js/vue.min.js"></script> -->
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.4.2/vue.js'></script>
     <!-- The core Firebase JS SDK is always required and must be listed first -->
     <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-app.js"></script>
     <!-- TODO: Add SDKs for Firebase products that you want to use
