@@ -6,6 +6,8 @@
         AllowLogIn: false,
         fixedOrderPanel:false,
         groupName: "",
+        groupPass:"",
+        passTrue: false,
         groupData:"",
         totalList: 0,
         workNum:"",
@@ -85,44 +87,50 @@
                 this.groupData = doc.data();
                 var data = this.groupData;
                 this.groupName =data.groupName;
-                this.workNum = data.work;
-                var botWork =  db.collection('gameWork').doc(this.workNum).collection('workList');
-                botWork.get().then(querySnapshot => {                    
-                    querySnapshot.forEach(doc => {
-                        self.workList.push(doc.data()['name'])
-                    });
-
-                });
-                var list =  db.collection('loginGroup').doc(this.groupId).collection('memberList');
-                if (list) {
-                    this.AllowLogIn = true;
-                    var data = list;
-                    var self = this;
-                    var ListData = this.ListData;
-                    var headData = this.HeadData;
-    
-                    data.get().then(querySnapshot => {
+                this.groupPass = data.groupPass;
+                if(this.groupPass==this.args.groupPass){
+                    this.workNum = data.work;
+                    var botWork =  db.collection('gameWork').doc(this.workNum).collection('workList');
+                    botWork.get().then(querySnapshot => {                    
                         querySnapshot.forEach(doc => {
-                            if (doc.id != 'title') {
-                                ListData.push(doc.data());
-    
-                            } else {
-                                headData.push(doc.data());
-                            }
+                            self.workList.push(doc.data()['name'])
                         });
-                        this.totalList = ListData.length;
-                        ListData.sort(function (a, b) {
-                            var value1 = a['gameWork'];
-                            var value2 = b['gameWork'];
-                            if (value1 == value2) {
-                                return a['userName'] > b['userName'] ? 1 : -1
-                            } else {
-                                return value1 > value2 ? 1 : -1
-                            }
-                        })
+    
                     });
-                } else {
+                    var list =  db.collection('loginGroup').doc(this.groupId).collection('memberList');
+                    if (list) {
+                        this.AllowLogIn = true;
+                        var data = list;
+                        var self = this;
+                        var ListData = this.ListData;
+                        var headData = this.HeadData;
+        
+                        data.get().then(querySnapshot => {
+                            querySnapshot.forEach(doc => {
+                                if (doc.id != 'title') {
+                                    ListData.push(doc.data());
+        
+                                } else {
+                                    headData.push(doc.data());
+                                }
+                            });
+                            this.totalList = ListData.length;
+                            ListData.sort(function (a, b) {
+                                var value1 = a['gameWork'];
+                                var value2 = b['gameWork'];
+                                if (value1 == value2) {
+                                    return a['userName'] > b['userName'] ? 1 : -1
+                                } else {
+                                    return value1 > value2 ? 1 : -1
+                                }
+                            })
+                        });
+                    } else {
+                    }
+                }else{
+                    this.AllowLogIn = false;
                 }
+                
             })
 
 
