@@ -4,17 +4,17 @@
         searchTxt: "",
         viewHeight: document.body.clientHeight,
         AllowLogIn: false,
-        fixedOrderPanel:false,
+        fixedOrderPanel: false,
         groupName: "",
-        groupPass:"",
+        groupPass: "",
         passTrue: false,
-        groupData:"",
+        groupData: "",
         totalList: 0,
-        workNum:"",
+        workNum: "",
         groupId: "",
         params: params,
         workref: "",
-        workList:[],
+        workList: [],
         ListData: [],
         HeadData: [],
         allWork: []
@@ -29,22 +29,22 @@
             groupInfo: function () {
                 return db.collection('loginGroup').doc(this.groupId)
             },
-            search_List: function() {
-                if(this.searchTxt!=""){
+            search_List: function () {
+                if (this.searchTxt != "") {
                     var newList = [];
                     for (var i = 0; i < this.ListData.length; i++) {
-    
+
                         if (this.ListData[i].gameUser.indexOf(this.searchTxt) != -1) {
                             newList.push(this.ListData[i])
-                        }else if (this.ListData[i].gameWork.indexOf(this.searchTxt) != -1) {
+                        } else if (this.ListData[i].gameWork.indexOf(this.searchTxt) != -1) {
                             newList.push(this.ListData[i])
-                        }else if (this.ListData[i].userName.indexOf(this.searchTxt) != -1) {
+                        } else if (this.ListData[i].userName.indexOf(this.searchTxt) != -1) {
                             newList.push(this.ListData[i])
                         }
                     }
-                    
+
                     return newList
-                }else{
+                } else {
                     return this.ListData;
                 }
 
@@ -82,55 +82,66 @@
             }
             var self = this;
             var groupInfo = db.collection('loginGroup').doc(self.groupId);
-            
+
             groupInfo.get().then(doc => {
                 this.groupData = doc.data();
                 var data = this.groupData;
-                this.groupName =data.groupName;
+                this.groupName = data.groupName;
                 this.groupPass = data.groupPass;
-                if(this.groupPass==this.args.groupPass){
+                if (this.groupPass == this.args.groupPass) {
                     this.workNum = data.work;
-                    var botWork =  db.collection('gameWork').doc(this.workNum).collection('workList');
-                    botWork.get().then(querySnapshot => {                    
+                    var botWork = db.collection('gameWork').doc(this.workNum).collection('workList');
+                    botWork.get().then(querySnapshot => {
                         querySnapshot.forEach(doc => {
-                            self.workList.push(doc.data()['name'])
+                            self.workList.push({
+                                'work':doc.data()['name'],
+                                'total':0+""
+                        })
                         });
-    
-                    });
-                    var list =  db.collection('loginGroup').doc(this.groupId).collection('memberList');
-                    if (list) {
-                        this.AllowLogIn = true;
-                        var data = list;
-                        var self = this;
-                        var ListData = this.ListData;
-                        var headData = this.HeadData;
-        
-                        data.get().then(querySnapshot => {
-                            querySnapshot.forEach(doc => {
-                                if (doc.id != 'title') {
-                                    ListData.push(doc.data());
-        
-                                } else {
-                                    headData.push(doc.data());
+                        var list = db.collection('loginGroup').doc(this.groupId).collection('memberList');
+                        if (list) {
+                            this.AllowLogIn = true;
+                            var data = list;                            
+                            var ListData = this.ListData;
+                            var headData = this.HeadData;
+
+                            data.get().then(querySnapshot => {
+                                querySnapshot.forEach(doc => {
+                                    if (doc.id != 'title') {
+                                        ListData.push(doc.data());
+
+                                    } else {
+                                        headData.push(doc.data());
+                                    }
+                                });
+                                this.totalList = ListData.length;
+                                ListData.sort(function (a, b) {
+                                    var value1 = a['gameWork'];
+                                    var value2 = b['gameWork'];
+                                    if (value1 == value2) {
+                                        return a['userName'] > b['userName'] ? 1 : -1
+                                    } else {
+                                        return value1 > value2 ? 1 : -1
+                                    }
+                                })
+                                var str = [];
+                                ListData.map(item => {
+                                    str.push(item['gameWork']);
+                                });
+                                for (var i = 0; i < self.workList.length; i++) {
+                                    var total = self.collectionRepeat(str, self.workList[i]['work'])
+                                    this.workList[i]['total']=total+"";
                                 }
                             });
-                            this.totalList = ListData.length;
-                            ListData.sort(function (a, b) {
-                                var value1 = a['gameWork'];
-                                var value2 = b['gameWork'];
-                                if (value1 == value2) {
-                                    return a['userName'] > b['userName'] ? 1 : -1
-                                } else {
-                                    return value1 > value2 ? 1 : -1
-                                }
-                            })
-                        });
-                    } else {
-                    }
-                }else{
+                        } else {
+                        }
+
+                    });
+
+                } else {
                     this.AllowLogIn = false;
                 }
-                
+
             })
 
 
@@ -163,8 +174,23 @@
                     }
                 }
             },
-            setUserInfo:function(item){
+            setUserInfo: function (item) {
                 this.searchTxt = item;
+            },
+            collectionRepeat: function (box, key) {
+                var counter = {};
+
+                box.forEach(function (x) {
+                    counter[x] = (counter[x] || 0) + 1;
+                });
+
+                var val = counter[key];
+
+                if (key === undefined) {
+                    return counter;
+                }
+
+                return (val) === undefined ? 0 : val;
             }
         }
     })

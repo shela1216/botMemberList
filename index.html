@@ -27,7 +27,7 @@
                                 aria-describedby="basic-addon1">
                         </div>
                         <p>快速搜尋:</p>
-                        <div class="searchTag" ><button type="button" class="btn btn-info"  @click="searchTxt=''" >ALL</button> <button type="button" class="btn btn-info" v-for="(item,index) in workList" :key="index" @click="setUserInfo(item)" >{{item}}</button></div>
+                        <div class="searchTag" ><button type="button" class="btn btn-info"  @click="searchTxt=''" >ALL</button> <button type="button" class="btn btn-info" v-for="(item,index) in workList" :key="index" @click="setUserInfo(item)" ><span>{{item.work}}</span> <span>: {{item.total}} </span></button></div>
 
                     </div>
                     <div class="detailform">
