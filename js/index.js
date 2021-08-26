@@ -175,7 +175,7 @@
                 }
             },
             setUserInfo: function (item) {
-                this.searchTxt = item;
+                this.searchTxt = item.work;
             },
             collectionRepeat: function (box, key) {
                 var counter = {};
