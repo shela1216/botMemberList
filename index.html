@@ -39,13 +39,12 @@
                                         <th >{{item.userName}}</th>
                                         <th >{{item.gameUser}}</th>
                                         <th >{{item.gameWork}}</th>
+                                        <th style="word-wrap: break-word; word-break: break-all " v-for="(cus, index2) in custom" :key="index2">{{cus}}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr v-for="(item,index) in search_List" :key="index">
-                                        <td style="word-wrap: break-word; word-break: break-all ">{{item.userName}}</td>
-                                        <td style="word-wrap: break-word; word-break: break-all ">{{item.gameUser}}</td>
-                                        <td style="word-wrap: break-word; word-break: break-all ">{{item.gameWork}}</td>
+                                        <td style="word-wrap: break-word; word-break: break-all " v-for="(td, tdindex) in item" :key="tdindex">{{td}}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -67,8 +66,8 @@
     </div>
 
 
-    <script src="js/vue.min.js"></script>
-    <!-- <script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.4.2/vue.js'></script> -->
+    <!-- <script src="js/vue.min.js"></script> -->
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.4.2/vue.js'></script>
     <!-- The core Firebase JS SDK is always required and must be listed first -->
     <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-app.js"></script>
     <!-- TODO: Add SDKs for Firebase products that you want to use
@@ -100,7 +99,7 @@
         }
     </script>
     <script src="js/b64.js"></script>
-    <script src="js/index.js?v1.1.0"></script>
+    <script src="js/index.js?v1.1.1"></script>
 </body>
 
 </html>

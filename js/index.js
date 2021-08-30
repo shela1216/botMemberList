@@ -17,7 +17,8 @@
         workList: [],
         ListData: [],
         HeadData: [],
-        allWork: []
+        allWork: [],
+        custom:[]
     }
     var vm = new Vue({
         el: "#main",
@@ -86,6 +87,9 @@
             groupInfo.get().then(doc => {
                 this.groupData = doc.data();
                 var data = this.groupData;
+                if(data.custom && data.custom.length>0){
+                    this.custom =data.custom;
+                }
                 this.groupName = data.groupName;
                 this.groupPass = data.groupPass;
                 if (this.groupPass == this.args.groupPass) {
@@ -107,8 +111,18 @@
 
                             data.get().then(querySnapshot => {
                                 querySnapshot.forEach(doc => {
+                                    var newData={
+                                       gameUser: doc.data()['gameUser'],
+                                       gameWork:  doc.data()['gameWork'], 
+                                       userName: doc.data()['userName'], 
+                                    }
+                                    if(this.custom ){
+                                        for(var i =0 ; i<this.custom.length; i++){
+                                            newData['custom'+i]=doc.data()['custom'+i]?doc.data()['custom'+i]: ""
+                                        }
+                                    }
                                     if (doc.id != 'title') {
-                                        ListData.push(doc.data());
+                                        ListData.push(newData);
 
                                     } else {
                                         headData.push(doc.data());
