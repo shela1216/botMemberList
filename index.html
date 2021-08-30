@@ -27,24 +27,23 @@
                                 aria-describedby="basic-addon1">
                         </div>
                         <p>快速搜尋:</p>
-                        <div class="searchTag" ><button type="button" class="btn btn-info"  @click="searchTxt=''" >ALL</button> <button type="button" class="btn btn-info" v-for="(item,index) in workList" :key="index" @click="setUserInfo(item)" ><span>{{item.work}}</span> <span>: {{item.total}} </span></button></div>
+                        <div class="searchTag" ><button type="button" class="btn btn-info margin"  @click="searchTxt=''" >ALL</button> <button type="button" class="btn btn-info" v-for="(item,index) in workList" :key="index" @click="setUserInfo(item)" ><span>{{item.work}}</span> <span>: {{item.total}} </span></button></div>
 
                     </div>
                     <div class="detailform">
-                        <div class="table-responsive customTable">
+                        <div id="table-demo" class="table-responsive">
 
-                            <table class="table table-striped" style="table-layout: fixed; overflow:break-word">
-                                <thead v-for="(item,index) in HeadData" :key="index">
-                                    <tr>
-                                        <th >{{item.userName}}</th>
-                                        <th >{{item.gameUser}}</th>
-                                        <th >{{item.gameWork}}</th>
-                                        <th style="word-wrap: break-word; word-break: break-all " v-for="(cus, index2) in custom" :key="index2">{{cus}}</th>
-                                    </tr>
-                                </thead>
+                            <table  class="with-header table table-striped" style="table-layout: fixed; overflow:break-word">
+                                
                                 <tbody>
+                                    <tr class="bold" v-for="(item,index) in HeadData" :key="index">
+                                        <td class="table__cell text-left" role="columnheader">{{item.userName}}</td>
+                                        <td class="table__cell text-left" role="columnheader">{{item.gameUser}}</td>
+                                        <td class="table__cell text-left" role="columnheader">{{item.gameWork}}</td>
+                                        <td class="table__cell text-left" role="columnheader" v-for="(cus, index2) in custom" :key="index2">{{cus}}</td>
+                                    </tr>
                                     <tr v-for="(item,index) in search_List" :key="index">
-                                        <td style="word-wrap: break-word; word-break: break-all " v-for="(td, tdindex) in item" :key="tdindex">{{td}}</td>
+                                        <td  :data-th="HeadData[0][tdindex]" style="word-wrap: break-word; word-break: break-all " v-for="(td, tdindex) in item" :key="tdindex"> {{td}}</td>
                                     </tr>
                                 </tbody>
                             </table>

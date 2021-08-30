@@ -125,7 +125,12 @@
                                         ListData.push(newData);
 
                                     } else {
-                                        headData.push(doc.data());
+                                        for(var i =0 ; i<this.custom.length; i++){
+                                            newData['custom'+i]=this.custom[i];
+                                        }
+                                        headData.push(newData);
+                                        
+                                        
                                     }
                                 });
                                 this.totalList = ListData.length;
