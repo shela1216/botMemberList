@@ -281,6 +281,7 @@ $breakpoint: 480px;
               content: attr(data-th)": ";
               font-weight: bold;
               display: inline-block;
+              color: #1b537e;
               @media (min-width: $breakpoint) {
                 display: none;
               }

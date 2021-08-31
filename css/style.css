@@ -89,5 +89,5 @@ span.bolder-pink { color: #b42f30; }
   #table-demo .with-header tr td { display: block; border: none; }
   #table-demo .with-header tr td:first-child { padding-top: .5em; }
   #table-demo .with-header tr td:last-child { padding-bottom: .5em; }
-  #table-demo .with-header tr td:before { content: attr(data-th) ": "; font-weight: bold; display: inline-block; } }
+  #table-demo .with-header tr td:before { content: attr(data-th) ": "; font-weight: bold; display: inline-block; color: #1b537e; } }
 @media (max-width: 480px) and (min-width: 480px) { #table-demo .with-header tr td:before { display: none; } }
