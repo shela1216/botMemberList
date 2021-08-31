@@ -18,7 +18,8 @@
         ListData: [],
         HeadData: [],
         allWork: [],
-        custom:[]
+        custom:[],
+        sortby:"gameWork"
     }
     var vm = new Vue({
         el: "#main",
@@ -34,14 +35,14 @@
                 if (this.searchTxt != "") {
                     var newList = [];
                     for (var i = 0; i < this.ListData.length; i++) {
-
+                        
                         if (this.ListData[i].gameUser.indexOf(this.searchTxt) != -1) {
                             newList.push(this.ListData[i])
                         } else if (this.ListData[i].gameWork.indexOf(this.searchTxt) != -1) {
                             newList.push(this.ListData[i])
                         } else if (this.ListData[i].userName.indexOf(this.searchTxt) != -1) {
                             newList.push(this.ListData[i])
-                        }
+                        } 
                     }
 
                     return newList
@@ -49,6 +50,9 @@
                     return this.ListData;
                 }
 
+            },
+            headList:function(){
+                return this.HeadData[0];
             },
             args: function () {
                 var ret = {};
@@ -134,15 +138,7 @@
                                     }
                                 });
                                 this.totalList = ListData.length;
-                                ListData.sort(function (a, b) {
-                                    var value1 = a['gameWork'];
-                                    var value2 = b['gameWork'];
-                                    if (value1 == value2) {
-                                        return a['userName'] > b['userName'] ? 1 : -1
-                                    } else {
-                                        return value1 > value2 ? 1 : -1
-                                    }
-                                })
+                                this.sortListData();
                                 var str = [];
                                 ListData.map(item => {
                                     str.push(item['gameWork']);
@@ -210,7 +206,28 @@
                 }
 
                 return (val) === undefined ? 0 : val;
+            },
+            sortListData:function(){
+                ListData = this.ListData;
+                sortBy = this.sortby;
+                ListData.sort(function (a, b) {
+                    var value1 = a[sortBy];
+                    var value2 = b[sortBy];
+                    if (value1 == value2) {
+                        return a['userName'] > b['userName'] ? 1 : -1
+                    } else {
+                        return value1 > value2 ? 1 : -1
+                    }
+                })
+            },
+            changeSort:function(indexName){
+                if(this.ListData){
+                    this.sortby = indexName;
+                    this.sortListData();
+                }
+
             }
+        
         }
     })
 })(window);

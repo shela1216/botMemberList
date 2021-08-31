@@ -231,10 +231,13 @@ $breakpoint: 480px;
       overflow-y: scroll;
       border-collapse: collapse;
       border: 1px solid #06a4d4;
+      @include breakpoint(max-width 480px) {
+        min-width: auto;
+    }
       tr {
         td {
           border: 1px solid #06a4d4;
-          padding: 10px;
+          padding: 5px;
         }
       }
       .bold {

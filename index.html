@@ -1,72 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>兔管家群組名單系統</title>
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/style.css?v1.0.7">
-</head>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.0/css/bootstrap.min.css"
+      integrity="sha512-F7WyTLiiiPqvu2pGumDR15med0MDkUIo5VTVyyfECR5DZmCnDhti9q5VID02ItWjq6fvDfMaBaDl2J3WdL1uxA=="
+      crossorigin="anonymous"
+    />
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.0/js/bootstrap.bundle.min.js' integrity='sha512-PqRelaJGXVuQ81N6wjUrRQelCDR7z8RvKGiR9SbSxKHPIt15eJDmIVv9EJgwq0XvgylszsjzvQ0+VyI2WtIshQ==' crossorigin='anonymous'></script>
+    <link rel="stylesheet" href="css/style.css?v1.0.7" />
+  </head>
 
-<body>
+  <body>
     <div id="main" v-cloak>
-        <section>
-            <div class="container" id="content"  >
-                <div class="block-heading">
-                    <h2 class="col-2 text-truncate">{{groupName}} 簽到名單</h2>
-                    <p>此簽到名單僅供檢視，請勿將此名單外流</p>
-                </div>
-                <div class="row form-style" v-if="AllowLogIn">
-                    <div class="simpleInfo" >
-                        <h3 class="title">共
-                            <span class="bolder-pink"> {{totalList}} </span>筆簽到資料</h3>
-                        <div class="form-group">
-                            <input id="userInfo" type="text" class="form-control" placeholder="請輸入搜尋關鍵字" v-model="searchTxt" aria-label="Card Holder"
-                                aria-describedby="basic-addon1">
-                        </div>
-                        <p>快速搜尋:</p>
-                        <div class="searchTag" ><button type="button" class="btn btn-info margin"  @click="searchTxt=''" >ALL</button> <button type="button" class="btn btn-info" v-for="(item,index) in workList" :key="index" @click="setUserInfo(item)" ><span>{{item.work}}</span> <span>: {{item.total}} </span></button></div>
-
-                    </div>
-                    <div class="detailform">
-                        <div id="table-demo" class="table-responsive">
-
-                            <table  class="with-header table table-striped" style="table-layout: fixed; overflow:break-word">
-                                
-                                <tbody>
-                                    <tr class="bold" v-for="(item,index) in HeadData" :key="index">
-                                        <td class="table__cell text-left" role="columnheader">{{item.userName}}</td>
-                                        <td class="table__cell text-left" role="columnheader">{{item.gameUser}}</td>
-                                        <td class="table__cell text-left" role="columnheader">{{item.gameWork}}</td>
-                                        <td class="table__cell text-left" role="columnheader" v-for="(cus, index2) in custom" :key="index2">{{cus}}</td>
-                                    </tr>
-                                    <tr v-for="(item,index) in search_List" :key="index">
-                                        <td  :data-th="HeadData[0][tdindex]" style="word-wrap: break-word; word-break: break-all " v-for="(td, tdindex) in item" :key="tdindex"> {{td}}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-
-                </div>
-                <div class="row form-style" v-if="!AllowLogIn">
-                    <div class="simpleInfo center">
-                        <p class="danger">群組/驗證碼 參數錯誤</p>
-                    </div>
-                </div>
-                <div class="copyright">Copyright © 2021 兔管家工作室 All Rights Reserved. v1.0.1</div>
+      <section>
+        <div class="container" id="content">
+          <div class="block-heading">
+            <h2 class="col-12 text-truncate">{{groupName}} 簽到名單</h2>
+            <p>此簽到名單僅供檢視，請勿將此名單外流</p>
+          </div>
+          <div class="row form-style" v-if="AllowLogIn">
+            <div class="simpleInfo">
+              <h3 class="title">
+                共 <span class="bolder-pink"> {{totalList}} </span>筆簽到資料
+              </h3>
+              <div class="form-group">
+                <input
+                  id="userInfo"
+                  type="text"
+                  class="form-control"
+                  placeholder="請輸入搜尋關鍵字"
+                  v-model="searchTxt"
+                  aria-label="Card Holder"
+                  aria-describedby="basic-addon1"
+                />
+              </div>
+              <p>快速搜尋:</p>
+              <div class="searchTag">
+                <button
+                  type="button"
+                  class="btn btn-info margin"
+                  @click="searchTxt=''"
+                >
+                  ALL
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-info"
+                  v-for="(item,index) in workList"
+                  :key="index"
+                  @click="setUserInfo(item)"
+                >
+                  <span>{{item.work}}</span> <span>: {{item.total}} </span>
+                </button>
+              </div>
+              <p>排序:</p>
+              <!-- Single button -->
+              <div class="dropdown" >
+                <button
+                  class="btn btn-secondary dropdown-toggle"
+                  type="button"
+                  id="dropdownMenuButton1"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                {{headList[sortby]}}
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                  <li v-for="(item, index) in headList" :key="index"><a class="dropdown-item" href="#" @click="changeSort(index)">{{item}}</a></li>
+                </ul>
+              </div>
             </div>
-        </section>
+            <div class="detailform">
+              <div id="table-demo" class="table-responsive">
+                <table class="with-header table table-striped" style="table-layout: fixed; overflow: break-word">
+                  <tbody>
+                    <tr
+                      class="bold" >
+                      <td class="table__cell text-left" role="columnheader" v-for="(item, index) in headList" :key="index">{{item}}</td>
 
-
+                    </tr>
+                    <tr v-for="(item,index) in search_List" :key="index">
+                      <td
+                        :data-th="headList[tdindex]"
+                        style="word-wrap: break-word; word-break: break-all"
+                        v-for="(td, tdindex) in item"
+                        :key="tdindex">{{td}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="row form-style" v-if="!AllowLogIn">
+            <div class="simpleInfo center">
+              <p class="danger">群組/驗證碼 參數錯誤</p>
+            </div>
+          </div>
+          <div class="copyright">
+            Copyright © 2021 兔管家工作室 All Rights Reserved. v1.0.1
+          </div>
+        </div>
+      </section>
     </div>
 
-
     <!-- <script src="js/vue.min.js"></script> -->
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.4.2/vue.js'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.4.2/vue.js"></script>
     <!-- The core Firebase JS SDK is always required and must be listed first -->
     <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-app.js"></script>
     <!-- TODO: Add SDKs for Firebase products that you want to use
@@ -74,31 +117,29 @@
     <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-analytics.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/7.16.1-2020615181619/firebase-firestore.min.js"></script>
 
-
     <script>
-        // Your web app's Firebase configuration
-        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-        var firebaseConfig = {
-            apiKey: "AIzaSyBIxBz_HgjGg07iQl7DczEZBfuwqImr06E",
-            authDomain: "linebot-roo.firebaseapp.com",
-            projectId: "linebot-roo",
-            storageBucket: "linebot-roo.appspot.com",
-            messagingSenderId: "128011934556",
-            appId: "1:128011934556:web:e039092143c07730683f99",
-            measurementId: "G-Q2VQKFCFM5"
-        };
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        firebase.analytics();
-        var db = firebase.firestore();
-        var url = window.location.href;
-        var params = "";
-        if (url.indexOf('?') != -1) {
-            params = "?" + url.split('?')[1].toString();
-        }
+      // Your web app's Firebase configuration
+      // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+      var firebaseConfig = {
+        apiKey: "AIzaSyBIxBz_HgjGg07iQl7DczEZBfuwqImr06E",
+        authDomain: "linebot-roo.firebaseapp.com",
+        projectId: "linebot-roo",
+        storageBucket: "linebot-roo.appspot.com",
+        messagingSenderId: "128011934556",
+        appId: "1:128011934556:web:e039092143c07730683f99",
+        measurementId: "G-Q2VQKFCFM5",
+      };
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      firebase.analytics();
+      var db = firebase.firestore();
+      var url = window.location.href;
+      var params = "";
+      if (url.indexOf("?") != -1) {
+        params = "?" + url.split("?")[1].toString();
+      }
     </script>
-    <script src="js/b64.js"></script>
-    <script src="js/index.js?v1.1.1"></script>
-</body>
 
+    <script src="js/index.js?v1.1.1"></script>
+  </body>
 </html>
