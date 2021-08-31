@@ -60,7 +60,7 @@
               </div>
               <p>排序:</p>
               <!-- Single button -->
-              <div class="dropdown" >
+              <div class="dropdown" v-if="headList" >
                 <button
                   class="btn btn-secondary dropdown-toggle"
                   type="button"
@@ -76,7 +76,7 @@
               </div>
             </div>
             <div class="detailform">
-              <div id="table-demo" class="table-responsive">
+              <div id="table-demo" class="table-responsive" v-if="search_List">
                 <table class="with-header table table-striped" style="table-layout: fixed; overflow: break-word">
                   <tbody>
                     <tr

@@ -171,24 +171,6 @@
                 var screenHeight = document.body.clientHeight;
                 this.viewHeight = screenHeight;
             },
-            handleScroll: function () {
-                const checkWindow = window !== undefined && window.scrollY;
-
-                if (checkWindow && window.scrollY > 144) {
-                    this.fixedOrderPanel = true
-                } else {
-                    this.fixedOrderPanel = false
-                }
-
-                const scrollFix = (scrolled) => {
-                    if (scrolled > 144) {
-
-                        this.fixedOrderPanel = true
-                    } else {
-                        this.fixedOrderPanel = false
-                    }
-                }
-            },
             setUserInfo: function (item) {
                 this.searchTxt = item.work;
             },
