@@ -1,4 +1,4 @@
-(function (window) {
+(function(window) {
     var ua = navigator.userAgent.toLowerCase() || navigator.vendor || window.opera;
     var data = {
         searchTxt: "",
@@ -18,31 +18,31 @@
         ListData: [],
         HeadData: [],
         allWork: [],
-        custom:[],
-        sortby:"gameWork"
+        custom: [],
+        sortby: "gameWork"
     }
     var vm = new Vue({
         el: "#main",
         data: data,
         computed: {
-            PageHeight: function () {
+            PageHeight: function() {
                 return this.viewHeight - 147 + "px"
             },
-            groupInfo: function () {
+            groupInfo: function() {
                 return db.collection('loginGroup').doc(this.groupId)
             },
-            search_List: function () {
+            search_List: function() {
                 if (this.searchTxt != "") {
                     var newList = [];
                     for (var i = 0; i < this.ListData.length; i++) {
-                        
+
                         if (this.ListData[i].gameUser.indexOf(this.searchTxt) != -1) {
                             newList.push(this.ListData[i])
                         } else if (this.ListData[i].gameWork.indexOf(this.searchTxt) != -1) {
                             newList.push(this.ListData[i])
                         } else if (this.ListData[i].userName.indexOf(this.searchTxt) != -1) {
                             newList.push(this.ListData[i])
-                        } 
+                        }
                     }
 
                     return newList
@@ -51,10 +51,10 @@
                 }
 
             },
-            headList:function(){
+            headList: function() {
                 return this.HeadData[0];
             },
-            args: function () {
+            args: function() {
                 var ret = {};
                 var str = this.params;
                 if (!str) {
@@ -73,12 +73,12 @@
                 return ret;
             }
         },
-        mounted: function () {
+        mounted: function() {
             this.viewHeight = document.body.clientHeight;
             window.addEventListener('resize', this.heightChange);
             document.addEventListener('scroll', this.handleScroll);
         },
-        created: function () {
+        created: function() {
             if (this.args.groupid) {
                 this.groupId = this.args.groupid;
             } else {
@@ -91,8 +91,8 @@
             groupInfo.get().then(doc => {
                 this.groupData = doc.data();
                 var data = this.groupData;
-                if(data.custom && data.custom.length>0){
-                    this.custom =data.custom;
+                if (data.custom && data.custom.length > 0) {
+                    this.custom = data.custom;
                 }
                 this.groupName = data.groupName;
                 this.groupPass = data.groupPass;
@@ -102,39 +102,40 @@
                     botWork.get().then(querySnapshot => {
                         querySnapshot.forEach(doc => {
                             self.workList.push({
-                                'work':doc.data()['name'],
-                                'total':0+""
-                        })
+                                'work': doc.data()['name'],
+                                'total': 0 + ""
+                            })
                         });
                         var list = db.collection('loginGroup').doc(this.groupId).collection('memberList');
                         if (list) {
                             this.AllowLogIn = true;
-                            var data = list;                            
+                            var data = list;
                             var ListData = this.ListData;
                             var headData = this.HeadData;
 
                             data.get().then(querySnapshot => {
                                 querySnapshot.forEach(doc => {
-                                    var newData={
-                                       gameUser: doc.data()['gameUser'],
-                                       gameWork:  doc.data()['gameWork'], 
-                                       userName: doc.data()['userName'], 
+                                    var newData = {
+                                        gameUser: doc.data()['gameUser'],
+                                        gameWork: doc.data()['gameWork'],
+                                        userName: doc.data()['userName'],
+                                        date: doc.data()['time']
                                     }
-                                    if(this.custom ){
-                                        for(var i =0 ; i<this.custom.length; i++){
-                                            newData['custom'+i]=doc.data()['custom'+i]?doc.data()['custom'+i]: ""
+                                    if (this.custom) {
+                                        for (var i = 0; i < this.custom.length; i++) {
+                                            newData['custom' + i] = doc.data()['custom' + i] ? doc.data()['custom' + i] : ""
                                         }
                                     }
                                     if (doc.id != 'title') {
                                         ListData.push(newData);
 
                                     } else {
-                                        for(var i =0 ; i<this.custom.length; i++){
-                                            newData['custom'+i]=this.custom[i];
+                                        for (var i = 0; i < this.custom.length; i++) {
+                                            newData['custom' + i] = this.custom[i];
                                         }
                                         headData.push(newData);
-                                        
-                                        
+
+
                                     }
                                 });
                                 this.totalList = ListData.length;
@@ -145,11 +146,10 @@
                                 });
                                 for (var i = 0; i < self.workList.length; i++) {
                                     var total = self.collectionRepeat(str, self.workList[i]['work'])
-                                    this.workList[i]['total']=total+"";
+                                    this.workList[i]['total'] = total + "";
                                 }
                             });
-                        } else {
-                        }
+                        } else {}
 
                     });
 
@@ -162,22 +162,22 @@
 
         },
 
-        destroyed: function () {
+        destroyed: function() {
             document.removeEventListener('scroll', this.handleScroll);
         },
 
         methods: {
-            heightChange: function (event) {
+            heightChange: function(event) {
                 var screenHeight = document.body.clientHeight;
                 this.viewHeight = screenHeight;
             },
-            setUserInfo: function (item) {
+            setUserInfo: function(item) {
                 this.searchTxt = item.work;
             },
-            collectionRepeat: function (box, key) {
+            collectionRepeat: function(box, key) {
                 var counter = {};
 
-                box.forEach(function (x) {
+                box.forEach(function(x) {
                     counter[x] = (counter[x] || 0) + 1;
                 });
 
@@ -189,10 +189,10 @@
 
                 return (val) === undefined ? 0 : val;
             },
-            sortListData:function(){
+            sortListData: function() {
                 ListData = this.ListData;
                 sortBy = this.sortby;
-                ListData.sort(function (a, b) {
+                ListData.sort(function(a, b) {
                     var value1 = a[sortBy];
                     var value2 = b[sortBy];
                     if (value1 == value2) {
@@ -202,14 +202,14 @@
                     }
                 })
             },
-            changeSort:function(indexName){
-                if(this.ListData){
+            changeSort: function(indexName) {
+                if (this.ListData) {
                     this.sortby = indexName;
                     this.sortListData();
                 }
 
             }
-        
+
         }
     })
 })(window);
