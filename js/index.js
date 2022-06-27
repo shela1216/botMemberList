@@ -208,6 +208,25 @@
                     this.sortListData();
                 }
 
+            },
+            download:function(){
+                var newData = this.HeadData.concat(this.ListData);
+                let csvContent = '';
+                newData.forEach(function(rowArray) {
+                    csvContent += rowArray.gameUser + ",";
+                    csvContent += "\"" + rowArray.gameWork + "\",";
+                    csvContent += "\"" + rowArray.userName + "\",";
+                    csvContent += "\n";
+                });
+              
+                // 下載的檔案名稱
+                let fileName = this.groupName + ' 會員名單_' + (new Date()).getTime() + '.csv';
+              
+                // 建立一個 a，並點擊它
+                let link = document.createElement('a');
+                link.setAttribute('href', 'data:text/csv;charset=utf-8,%EF%BB%BF' + encodeURI(csvContent));
+                link.setAttribute('download', fileName);
+                link.click();
             }
 
         }

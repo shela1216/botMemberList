@@ -22,7 +22,7 @@
                 <div class="row form-style" v-if="AllowLogIn">
                     <div class="simpleInfo">
                         <h3 class="title">
-                            共 <span class="bolder-pink"> {{totalList}} </span>筆簽到資料
+                            共 <span class="bolder-pink"> {{totalList}} </span>筆簽到資料 <button type="button" class="btn btn-info btn-sm" @click="download()">下載</button>
                         </h3>
                         <div class="form-group">
                             <input id="userInfo" type="text" class="form-control" placeholder="請輸入搜尋關鍵字" v-model="searchTxt" aria-label="Card Holder" aria-describedby="basic-addon1" />
@@ -75,8 +75,8 @@
         </section>
     </div>
 
-    <!-- <script src="js/vue.min.js"></script> -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.4.2/vue.js"></script>
+    <script src="js/vue.min.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.4.2/vue.js"></script> -->
     <!-- The core Firebase JS SDK is always required and must be listed first -->
     <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-app.js"></script>
     <!-- TODO: Add SDKs for Firebase products that you want to use
