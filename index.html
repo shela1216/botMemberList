@@ -22,12 +22,16 @@
                 <div class="row form-style" v-if="AllowLogIn">
                     <div class="simpleInfo">
                         <h3 class="title">
-                            共 <span class="bolder-pink"> {{totalList}} </span>筆簽到資料 <button type="button" class="btn btn-info btn-sm" @click="download()">下載</button>
+                            共 <span class="bolder-pink"> {{totalList}} </span>筆簽到資料 <button type="button" class="btn btn-info btn-sm" @click="download()"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-arrow-down-fill" viewBox="0 0 16 16">
+                                <path d="M8 2a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 6.095 0 7.555 0 9.318 0 11.366 1.708 13 3.781 13h8.906C14.502 13 16 11.57 16 9.773c0-1.636-1.242-2.969-2.834-3.194C12.923 3.999 10.69 2 8 2zm2.354 6.854-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 1 1 .708-.708L7.5 9.293V5.5a.5.5 0 0 1 1 0v3.793l1.146-1.147a.5.5 0 0 1 .708.708z"/>
+                              </svg> 下載</button>
                         </h3>
-                        <div class="form-group">
+                        <div class="form-group mb-2">
                             <input id="userInfo" type="text" class="form-control" placeholder="請輸入搜尋關鍵字" v-model="searchTxt" aria-label="Card Holder" aria-describedby="basic-addon1" />
                         </div>
-                        <p>快速搜尋:</p>
+                        <div><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                          </svg> 快速搜尋:</div>
                         <div class="searchTag">
                             <button type="button" class="btn btn-info margin" @click="searchTxt=''">
                   ALL
@@ -36,7 +40,9 @@
                   <span>{{item.work}}</span> <span>: {{item.total}} </span>
                 </button>
                         </div>
-                        <p>排序:</p>
+                        <p><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-sort-up" viewBox="0 0 16 16">
+                            <path d="M3.5 12.5a.5.5 0 0 1-1 0V3.707L1.354 4.854a.5.5 0 1 1-.708-.708l2-1.999.007-.007a.498.498 0 0 1 .7.006l2 2a.5.5 0 1 1-.707.708L3.5 3.707V12.5zm3.5-9a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zM7.5 6a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zm0 3a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1h-3zm0 3a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1h-1z"/>
+                          </svg> 排序:</p>
                         <!-- Single button -->
                         <div class="dropdown" v-if="headList">
                             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
