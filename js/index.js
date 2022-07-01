@@ -1,4 +1,4 @@
-(function(window) {
+(function (window) {
     var ua = navigator.userAgent.toLowerCase() || navigator.vendor || window.opera;
     var data = {
         searchTxt: "",
@@ -17,21 +17,26 @@
         workList: [],
         ListData: [],
         HeadData: [],
+        oldNameData: [],
         allWork: [],
         custom: [],
+        currentIndex: 0,
         sortby: "gameWork"
     }
     var vm = new Vue({
         el: "#main",
         data: data,
         computed: {
-            PageHeight: function() {
+            PageHeight: function () {
                 return this.viewHeight - 147 + "px"
             },
-            groupInfo: function() {
+            groupInfo: function () {
                 return db.collection('loginGroup').doc(this.groupId)
             },
-            search_List: function() {
+            windowInfo: function () {
+                return this.oldNameData[this.currentIndex]
+            },
+            search_List: function () {
                 if (this.searchTxt != "") {
                     var newList = [];
                     for (var i = 0; i < this.ListData.length; i++) {
@@ -51,10 +56,10 @@
                 }
 
             },
-            headList: function() {
+            headList: function () {
                 return this.HeadData[0];
             },
-            args: function() {
+            args: function () {
                 var ret = {};
                 var str = this.params;
                 if (!str) {
@@ -73,12 +78,12 @@
                 return ret;
             }
         },
-        mounted: function() {
+        mounted: function () {
             this.viewHeight = document.body.clientHeight;
             window.addEventListener('resize', this.heightChange);
             document.addEventListener('scroll', this.handleScroll);
         },
-        created: function() {
+        created: function () {
             if (this.args.groupid) {
                 this.groupId = this.args.groupid;
             } else {
@@ -120,7 +125,17 @@
                                         gameWork: doc.data()['gameWork'],
                                         userName: doc.data()['userName'],
                                         date: doc.data()['time']
+
                                     }
+                                    var oldInfo = {
+                                        gameUser: doc.data()['gameUser'],
+                                        userName: doc.data()['userName'],
+                                        history: []
+                                    }
+                                    if (doc.data()['oldID'] && doc.data()['oldID'].length > 0) {
+                                        oldInfo.history = doc.data()['oldID']
+                                    }
+                                    this.oldNameData.push(oldInfo)
                                     if (this.custom) {
                                         for (var i = 0; i < this.custom.length; i++) {
                                             newData['custom' + i] = doc.data()['custom' + i] ? doc.data()['custom' + i] : ""
@@ -149,7 +164,7 @@
                                     this.workList[i]['total'] = total + "";
                                 }
                             });
-                        } else {}
+                        } else { }
 
                     });
 
@@ -162,22 +177,22 @@
 
         },
 
-        destroyed: function() {
+        destroyed: function () {
             document.removeEventListener('scroll', this.handleScroll);
         },
 
         methods: {
-            heightChange: function(event) {
+            heightChange: function (event) {
                 var screenHeight = document.body.clientHeight;
                 this.viewHeight = screenHeight;
             },
-            setUserInfo: function(item) {
+            setUserInfo: function (item) {
                 this.searchTxt = item.work;
             },
-            collectionRepeat: function(box, key) {
+            collectionRepeat: function (box, key) {
                 var counter = {};
 
-                box.forEach(function(x) {
+                box.forEach(function (x) {
                     counter[x] = (counter[x] || 0) + 1;
                 });
 
@@ -189,10 +204,10 @@
 
                 return (val) === undefined ? 0 : val;
             },
-            sortListData: function() {
+            sortListData: function () {
                 ListData = this.ListData;
                 sortBy = this.sortby;
-                ListData.sort(function(a, b) {
+                ListData.sort(function (a, b) {
                     var value1 = a[sortBy];
                     var value2 = b[sortBy];
                     if (value1 == value2) {
@@ -202,26 +217,37 @@
                     }
                 })
             },
-            changeSort: function(indexName) {
+            changeSort: function (indexName) {
                 if (this.ListData) {
                     this.sortby = indexName;
                     this.sortListData();
                 }
 
             },
-            download:function(){
+            haveOldData: function (index, tdindex) {
+                if (this.headList[tdindex] == "遊戲ID" && this.oldNameData[index].history.length > 0) {
+                    return true;
+                } else {
+                    return false;
+                }
+
+            },
+            getOldInfo: function (index) {
+                this.currentIndex = index;
+            },
+            download: function () {
                 var newData = this.HeadData.concat(this.ListData);
                 let csvContent = '';
-                newData.forEach(function(rowArray) {
+                newData.forEach(function (rowArray) {
                     csvContent += rowArray.gameUser + ",";
                     csvContent += "\"" + rowArray.gameWork + "\",";
                     csvContent += "\"" + rowArray.userName + "\",";
                     csvContent += "\n";
                 });
-              
+
                 // 下載的檔案名稱
                 let fileName = this.groupName + ' 會員名單_' + (new Date()).getTime() + '.csv';
-              
+
                 // 建立一個 a，並點擊它
                 let link = document.createElement('a');
                 link.setAttribute('href', 'data:text/csv;charset=utf-8,%EF%BB%BF' + encodeURI(csvContent));
