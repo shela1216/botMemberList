@@ -39,18 +39,21 @@
             search_List: function () {
                 if (this.searchTxt != "") {
                     var newList = [];
+                    var newOldNameData = [];
                     for (var i = 0; i < this.ListData.length; i++) {
-
                         if (this.ListData[i].gameUser.indexOf(this.searchTxt) != -1) {
                             newList.push(this.ListData[i])
+                            newOldNameData.push(this.oldNameData[i]);
                         } else if (this.ListData[i].gameWork.indexOf(this.searchTxt) != -1) {
-                            newList.push(this.ListData[i])
+                            newList.push(this.ListData[i]);
+                            newOldNameData.push(this.oldNameData[i]);
                         } else if (this.ListData[i].userName.indexOf(this.searchTxt) != -1) {
-                            newList.push(this.ListData[i])
+                            newList.push(this.ListData[i]);
+                            newOldNameData.push(this.oldNameData[i]);
                         }
                     }
-
-                    return newList
+                    this.oldNameData = this.newOldNameData;
+                    return newList;
                 } else {
                     return this.ListData;
                 }
@@ -121,10 +124,10 @@
                             data.get().then(querySnapshot => {
                                 querySnapshot.forEach(doc => {
                                     var newData = {
+
                                         gameUser: doc.data()['gameUser'],
                                         gameWork: doc.data()['gameWork'],
                                         userName: doc.data()['userName'],
-                                        date: doc.data()['time']
 
                                     }
                                     var oldInfo = {
@@ -205,9 +208,19 @@
                 return (val) === undefined ? 0 : val;
             },
             sortListData: function () {
-                ListData = this.ListData;
-                sortBy = this.sortby;
+                var ListData = this.ListData;
+                var oldNameData = this.oldNameData;
+                var sortBy = this.sortby;
                 ListData.sort(function (a, b) {
+                    var value1 = a[sortBy];
+                    var value2 = b[sortBy];
+                    if (value1 == value2) {
+                        return a['userName'] > b['userName'] ? 1 : -1
+                    } else {
+                        return value1 > value2 ? 1 : -1
+                    }
+                })
+                oldNameData.sort(function (a, b) {
                     var value1 = a[sortBy];
                     var value2 = b[sortBy];
                     if (value1 == value2) {
