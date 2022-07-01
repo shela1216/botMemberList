@@ -39,20 +39,15 @@
             search_List: function () {
                 if (this.searchTxt != "") {
                     var newList = [];
-                    var newOldNameData = [];
                     for (var i = 0; i < this.ListData.length; i++) {
                         if (this.ListData[i].gameUser.indexOf(this.searchTxt) != -1) {
                             newList.push(this.ListData[i])
-                            newOldNameData.push(this.oldNameData[i]);
                         } else if (this.ListData[i].gameWork.indexOf(this.searchTxt) != -1) {
                             newList.push(this.ListData[i]);
-                            newOldNameData.push(this.oldNameData[i]);
                         } else if (this.ListData[i].userName.indexOf(this.searchTxt) != -1) {
                             newList.push(this.ListData[i]);
-                            newOldNameData.push(this.oldNameData[i]);
                         }
                     }
-                    this.oldNameData = this.newOldNameData;
                     return newList;
                 } else {
                     return this.ListData;
@@ -209,18 +204,8 @@
             },
             sortListData: function () {
                 var ListData = this.ListData;
-                var oldNameData = this.oldNameData;
                 var sortBy = this.sortby;
                 ListData.sort(function (a, b) {
-                    var value1 = a[sortBy];
-                    var value2 = b[sortBy];
-                    if (value1 == value2) {
-                        return a['userName'] > b['userName'] ? 1 : -1
-                    } else {
-                        return value1 > value2 ? 1 : -1
-                    }
-                })
-                oldNameData.sort(function (a, b) {
                     var value1 = a[sortBy];
                     var value2 = b[sortBy];
                     if (value1 == value2) {
@@ -237,16 +222,28 @@
                 }
 
             },
-            haveOldData: function (index, tdindex) {
-                if (this.headList[tdindex] == "遊戲ID" && this.oldNameData[index].history.length > 0) {
-                    return true;
-                } else {
+            haveOldData: function (name, tdindex) {
+                if(tdindex =="gameUser"){
+                    for(var i=0; i<this.oldNameData.length;i++){
+                        if(this.oldNameData[i][tdindex] == name){                            
+                            return this.oldNameData[i].history.length>0
+                        }
+                    }
                     return false;
-                }
+                }else{
+                    return false;
+                }                
+                
 
             },
-            getOldInfo: function (index) {
-                this.currentIndex = index;
+            getOldInfo: function (name) {
+                console.log(name)
+                for(var i=0; i<this.oldNameData.length;i++){
+                    if(this.oldNameData[i]['gameUser'] == name){
+                        this.currentIndex = i;
+                    }
+                }
+                
             },
             download: function () {
                 var newData = this.HeadData.concat(this.ListData);

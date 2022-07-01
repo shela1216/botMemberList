@@ -62,7 +62,7 @@
 
                                     </tr>
                                     <tr v-for="(item,index) in search_List" :key="index">
-                                        <td :data-th="headList[tdindex]" style="word-wrap: break-word; word-break: break-all" v-for="(td, tdindex) in item" :key="tdindex">{{td}}<a v-if="haveOldData(index,tdindex)" class="btn btn-sm" @click="getOldInfo(index)" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clock-fill" viewBox="0 0 16 16">
+                                        <td :data-th="headList[tdindex]" style="word-wrap: break-word; word-break: break-all" v-for="(td, tdindex) in item" :key="tdindex">{{td}}<a v-if="haveOldData(td,tdindex)" class="btn btn-sm" @click="getOldInfo(td)" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clock-fill" viewBox="0 0 16 16">
                                             <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"/>
                                           </svg></a></td>
                                     </tr>
@@ -72,7 +72,7 @@
                     </div>
                 </div>
                 <!-- Modal -->
-                <div class="modal fade" id="staticBackdrop"  data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div v-if="windowInfo" class="modal fade" id="staticBackdrop"  data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                     <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -97,8 +97,8 @@
         </section>
     </div>
 
-    <script src="js/vue.min.js"></script>
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.4.2/vue.js"></script> -->
+    <!-- <script src="js/vue.min.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.4.2/vue.js"></script>
     <!-- The core Firebase JS SDK is always required and must be listed first -->
     <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-app.js"></script>
     <!-- TODO: Add SDKs for Firebase products that you want to use
