@@ -119,7 +119,6 @@
                             data.get().then(querySnapshot => {
                                 querySnapshot.forEach(doc => {
                                     var newData = {
-
                                         gameUser: doc.data()['gameUser'],
                                         gameWork: doc.data()['gameWork'],
                                         userName: doc.data()['userName'],
@@ -237,7 +236,6 @@
 
             },
             getOldInfo: function (name) {
-                console.log(name)
                 for(var i=0; i<this.oldNameData.length;i++){
                     if(this.oldNameData[i]['gameUser'] == name){
                         this.currentIndex = i;
