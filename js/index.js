@@ -222,26 +222,26 @@
 
             },
             haveOldData: function (name, tdindex) {
-                if(tdindex =="gameUser"){
-                    for(var i=0; i<this.oldNameData.length;i++){
-                        if(this.oldNameData[i][tdindex] == name){                            
-                            return this.oldNameData[i].history.length>0
+                if (tdindex == "gameUser") {
+                    for (var i = 0; i < this.oldNameData.length; i++) {
+                        if (this.oldNameData[i][tdindex] == name) {
+                            return this.oldNameData[i].history.length > 0
                         }
                     }
                     return false;
-                }else{
+                } else {
                     return false;
-                }                
-                
+                }
+
 
             },
             getOldInfo: function (name) {
-                for(var i=0; i<this.oldNameData.length;i++){
-                    if(this.oldNameData[i]['gameUser'] == name){
+                for (var i = 0; i < this.oldNameData.length; i++) {
+                    if (this.oldNameData[i]['gameUser'] == name) {
                         this.currentIndex = i;
                     }
                 }
-                
+
             },
             download: function () {
                 var newData = this.HeadData.concat(this.ListData);

@@ -69,11 +69,11 @@
                     <div class="modal-dialog modal-dialog-scrollable">
                     <div class="modal-content">
                         <div class="modal-header">
-                        <h5 class="modal-title" id="staticBackdropLabel">{{windowInfo.userName}} 更名紀錄</h5>
+                        <h5 class="modal-title" id="staticBackdropLabel"><span class="text-info">{{windowInfo.userName}}</span> 更名紀錄</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <p v-for="(item,index) in windowInfo.history" :key="index">{{item}}</p>
+                            <p v-for="(item,index) in windowInfo.history" :key="index">{{(index+1)}}. {{item}}</p>
                         </div>
                     </div>
                     </div>
