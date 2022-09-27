@@ -246,10 +246,18 @@
             download: function () {
                 var newData = this.HeadData.concat(this.ListData);
                 let csvContent = '';
+                let self =this;
                 newData.forEach(function (rowArray) {
+                    
                     csvContent += rowArray.gameUser + ",";
                     csvContent += "\"" + rowArray.gameWork + "\",";
                     csvContent += "\"" + rowArray.userName + "\",";
+                    if (self.custom) {
+                        for (var i = 0; i < self.custom.length; i++) {
+                            csvContent += "\"" + rowArray['custom' + i] + "\",";
+                            console.log(rowArray['custom' + i])
+                        }                        
+                    }
                     csvContent += "\n";
                 });
 
